@@ -4,11 +4,10 @@ from typing import List
 from transaction import Transaction, TransactionType
 
 
-def ingest_data():
-    credit_transaction: List[Transaction] = []
-    debit_transaction: List[Transaction] = []
+def ingest_data(file_name: str) -> List[Transaction]:
+    transactions: List[Transaction] = []
 
-    with open("data.csv", newline="") as csvfile:
+    with open(file_name, newline="") as csvfile:
         reader = csv.DictReader(csvfile)
 
         for row in reader:
@@ -18,9 +17,9 @@ def ingest_data():
 
             if type == "Crédito":
                 transaction = Transaction(id, TransactionType.CREDIT, amount)
-                credit_transaction.append(transaction)
+                transactions.append(transaction)
             elif type == "Débito":
                 transaction = Transaction(id, TransactionType.DEBIT, amount)
-                debit_transaction.append(transaction)
+                transactions.append(transaction)
 
-    return credit_transaction, debit_transaction
+    return transactions
