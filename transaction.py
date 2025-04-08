@@ -7,24 +7,25 @@ class TransactionType(Enum):
 
 
 class Transaction:
-    _id: int
-    _type: TransactionType
-    _amount: int
+    # Atributos privados (inmodificables fuera de la clase)
+    __id: int
+    __type: TransactionType
+    __amount: float
 
-    def __init__(self, id: int, type: TransactionType, amount: int):
-        self._id = id
-        self._type = type
-        self._amount = amount
+    def __init__(self, id: int, type: TransactionType, amount: float):
+        self.__id = id
+        self.__type = type
+        self.__amount = amount
 
-    # Atributos de solo lectura, para no modificar
+    # Atributos de solo lectura
     @property
     def id(self):
-        return self._id
+        return self.__id
 
     @property
     def type(self):
-        return self._type
+        return self.__type
 
     @property
     def amount(self):
-        return self._amount
+        return self.__amount
