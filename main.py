@@ -1,11 +1,12 @@
 from ingest_data import ingest_data
-from transaction_operations import show_report
+from transaction_operations import generate_report, print_report
 
 transactions = []
 while len(transactions) == 0:
     user_input = input('Ingresar el nombre del archivo o "SALIR": ')
 
     if user_input.upper() == "SALIR":
+        print("\n Hasta pronto. 👋")
         exit()
 
     transactions = ingest_data(user_input)
@@ -35,9 +36,8 @@ while True:
         break
 
     if option_user == 1:
-        if len(transactions) == 0:
-            print("\n 📌 Aún no hay transacciones.")
-            continue  # Vuelve a las opciones
-
         # Llama a la función que calcula la opción 1
-        show_report(transactions)
+        balance, max_transaction, credit_count, debit_count = generate_report(
+            transactions
+        )
+        print_report(balance, max_transaction, credit_count, debit_count)

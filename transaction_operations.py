@@ -3,7 +3,7 @@ from typing import List
 from transaction import Transaction, TransactionType
 
 
-def show_report(transaction_list: List[Transaction]):
+def generate_report(transaction_list: List[Transaction]):
     if len(transaction_list) == 0:
         return
 
@@ -31,6 +31,12 @@ def show_report(transaction_list: List[Transaction]):
     # Entrega el balance de todos los montos de las transaciones
     balance = round((credit_sum - debit_sum), 2)
 
+    return balance, max_transaction, credit_count, debit_count
+
+
+def print_report(
+    balance: float, max_transaction: Transaction, credit_count: int, debit_count: int
+):
     # Inicia la creación del mensaje
     msg = f"""\n 
                  Reporte de Transacciones
