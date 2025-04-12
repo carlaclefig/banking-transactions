@@ -8,29 +8,24 @@ from transaction import Transaction, TransactionType
 def ingest_data(file_name: str) -> List[Transaction]:
     transactions: List[Transaction] = []
 
-    try:
-        with open(file_name, newline="") as csvfile:
-            reader = csv.DictReader(csvfile)
+    with open(file_name) as csv_file:
+        reader = csv.DictReader(csv_file)
 
-            if len(transactions) == 0:
-                print("\n 📌 El archivo no cuenta con transacciones.\n")
+        for row in reader:
+            id = int(row["id"])
+            type = normalize_string(row["tipo"])
+            amount = float(row["monto"])
 
-            for row in reader:
-                id = int(row["id"])
-                type = normalize_string(row["tipo"])
-                amount = float(row["monto"])
+            if type == "credito":
+                transaction = Transaction(id, TransactionType.CREDIT, amount)
+                transactions.append(transaction)
+            elif type == "debito":
+                transaction = Transaction(id, TransactionType.DEBIT, amount)
+                transactions.append(transaction)
 
-                if type == "credito":
-                    transaction = Transaction(id, TransactionType.CREDIT, amount)
-                    transactions.append(transaction)
-                elif type == "debito":
-                    transaction = Transaction(id, TransactionType.DEBIT, amount)
-                    transactions.append(transaction)
+        if len(transactions) == 0:
+            print("\n 📌 El archivo no cuenta con transacciones.")
 
-        return transactions
-
-    except FileNotFoundError:
-        print("\n 🚫 No se encontró el archivo.🚫 \n ")
         return transactions
 
 

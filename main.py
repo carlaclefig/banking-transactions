@@ -2,17 +2,24 @@ from ingest_data import ingest_data
 from transaction_operations import generate_report, print_report
 
 transactions = []
-while len(transactions) == 0:
-    user_input = input('Ingresar el nombre del archivo o "SALIR": ')
+while True:
+    try:
+        user_input = input('Ingresar el nombre del archivo o "SALIR": ')
 
-    if user_input.upper() == "SALIR":
-        print("\n Hasta pronto. 👋")
-        exit()
+        if user_input.upper() == "SALIR":
+            print("\n Hasta pronto. 👋")
+            exit()
+        transactions = ingest_data(user_input)
+        break
 
-    transactions = ingest_data(user_input)
+    except FileNotFoundError:
+        print("\n 🚫 No se encontró el archivo.🚫 \n ")
+    except UnicodeDecodeError:
+        print("\n ❌ Error al procesar el archivo. ❌  \n")
+    except KeyError:
+        print("\n ⚠️  El archivo no tiene las columnas esperadas (id, tipo, monto). ⚠️\n")
 
 while True:
-    # Opciones
     print(
         "\n Seleciona una de las siguientes opciones:"
         "\n 1. Reporte de Transacciones "
@@ -36,6 +43,10 @@ while True:
         break
 
     if option_user == 1:
+        # Verifica que no se realice el reporte sin datos
+        if len(transactions) == 0:
+            print("\n ❌ No se puede realizar el reporte sin datos. \n")
+            continue
         # Llama a la función que calcula la opción 1
         balance, max_transaction, credit_count, debit_count = generate_report(
             transactions
